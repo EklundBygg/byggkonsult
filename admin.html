@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="sv">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Eklund Byggkonsult | Admin</title>
+    <link rel="stylesheet" href="admin.css" />
+  </head>
+  <body>
+    <div class="admin-shell">
+      <header class="admin-topbar">
+        <div class="admin-brand">
+          <img src="Baralogo60px.png" alt="Eklund Byggkonsult" />
+          <div>
+            <strong>Admin</strong>
+            <span>Innehall</span>
+          </div>
+        </div>
+        <nav class="admin-tools" aria-label="Adminverktyg">
+          <span class="admin-tool is-active">Projekt</span>
+          <span class="admin-tool is-active">Medarbetare</span>
+        </nav>
+        <div class="admin-actions">
+          <a href="index.html">Till sajten</a>
+          <button id="sign-out-button" type="button" hidden>Logga ut</button>
+        </div>
+      </header>
+
+      <main class="admin-main">
+        <section class="auth-card" id="auth-card">
+          <div class="card-heading">
+            <div>
+              <p class="eyebrow">Inloggning</p>
+              <h1>Logga in for att redigera innehall</h1>
+            </div>
+          </div>
+
+          <form id="login-form" class="stack">
+            <label>
+              <span>E-post</span>
+              <input id="login-email" type="email" autocomplete="email" required />
+            </label>
+            <label>
+              <span>Lösenord</span>
+              <input id="login-password" type="password" autocomplete="current-password" required />
+            </label>
+            <button class="primary-button" type="submit">Logga in</button>
+          </form>
+
+          <p class="status-message" id="auth-status"></p>
+        </section>
+
+        <section class="admin-app" id="admin-app" hidden>
+          <section class="workspace-card site-settings-card">
+            <form class="site-settings-toolbar">
+              <input id="hero-image-url" type="hidden" />
+              <input id="hero-image-position" type="hidden" value="50% 50%" />
+
+              <div class="site-settings-copy">
+                <p class="eyebrow">Hero</p>
+                <h2>Bakgrundsbild</h2>
+              </div>
+
+              <div
+                class="image-preview hero-image-preview"
+                id="hero-image-preview"
+                role="slider"
+                aria-label="Placera hero-bild"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                aria-valuenow="50"
+                tabindex="0"
+              ></div>
+
+              <label class="media-upload site-settings-upload">
+                <span>Ny hero-bild</span>
+                <input id="hero-image-file" type="file" accept="image/png,image/jpeg,image/webp,image/gif" />
+              </label>
+
+              <div class="site-settings-position">
+                <span>Placering</span>
+                <small>Dra motivet i rutan tills det ligger rätt.</small>
+                <strong id="hero-image-position-readout">50% / 50%</strong>
+              </div>
+
+              <div class="site-settings-actions">
+                <button id="upload-hero-image-button" class="secondary-button" type="button">Ladda upp</button>
+                <button id="save-site-settings-button" class="primary-button" type="button">Spara</button>
+              </div>
+            </form>
+
+            <p class="status-message" id="site-settings-status"></p>
+          </section>
+
+          <section class="workspace-card">
+            <div class="workspace-heading">
+              <h2>Projekt</h2>
+            </div>
+
+            <div class="workspace-grid">
+              <aside class="project-list-panel">
+                <div class="panel-header">
+                  <div>
+                    <p class="eyebrow">Lista</p>
+                    <h2>Projekt</h2>
+                  </div>
+                  <button id="new-project-button" class="secondary-button" type="button">+ Nytt</button>
+                </div>
+
+                <div class="project-list" id="project-list"></div>
+              </aside>
+
+              <section class="editor-panel">
+                <div class="panel-header">
+                  <div>
+                    <p class="eyebrow">Redigera</p>
+                    <h2 id="editor-title">Nytt projekt</h2>
+                  </div>
+                  <div class="editor-actions">
+                    <button id="delete-project-button" class="danger-button" type="button">Ta bort</button>
+                    <button id="save-project-button" class="primary-button" type="button">Spara</button>
+                  </div>
+                </div>
+
+                <form id="project-form" class="editor-form">
+                  <input id="project-slug" name="slug" type="hidden" />
+                  <input id="project-sort-order" name="sort_order" type="hidden" value="0" />
+                  <input id="project-thumbnail-url" name="thumbnail_url" type="hidden" />
+
+                  <label>
+                    <span>Titel</span>
+                    <input id="project-title" name="title" type="text" required />
+                  </label>
+
+                  <div class="field-row">
+                    <label>
+                      <span>Publicerad</span>
+                      <select id="project-published" name="is_published">
+                        <option value="true">Ja</option>
+                        <option value="false">Nej</option>
+                      </select>
+                    </label>
+                  </div>
+
+                  <label>
+                    <span>Publiceringsdatum</span>
+                    <input id="project-published-at" name="published_at" type="date" />
+                  </label>
+
+                  <label>
+                    <span>Kort beskrivning</span>
+                    <textarea id="project-short-description" name="short_description" rows="3"></textarea>
+                  </label>
+
+                  <label>
+                    <span>Lång beskrivning</span>
+                    <textarea id="project-long-description" name="long_description" rows="7"></textarea>
+                  </label>
+
+                  <div class="media-panel">
+                    <div class="media-header">
+                      <div>
+                        <span class="eyebrow">Thumbnail</span>
+                        <h3>Projektbild</h3>
+                      </div>
+                    </div>
+
+                    <div class="field-row media-row">
+                      <label class="media-upload">
+                        <span>Ladda upp bild</span>
+                        <input id="project-image-file" type="file" accept="image/png,image/jpeg,image/webp,image/gif" />
+                      </label>
+                    </div>
+
+                    <button id="upload-image-button" class="secondary-button" type="button">Ladda upp</button>
+
+                    <div class="image-preview" id="project-image-preview"></div>
+                  </div>
+
+                  <div class="media-panel">
+                    <div class="media-header">
+                      <div>
+                        <span class="eyebrow">Galleri</span>
+                        <h3>Fler projektbilder</h3>
+                      </div>
+                    </div>
+
+                    <div class="field-row media-row">
+                      <label class="media-upload">
+                        <span>Ladda upp extra bild</span>
+                        <input id="project-gallery-image-file" type="file" accept="image/png,image/jpeg,image/webp,image/gif" />
+                      </label>
+                    </div>
+
+                    <button id="upload-project-gallery-image-button" class="secondary-button" type="button">Ladda upp till galleri</button>
+
+                    <div class="gallery-list" id="project-gallery-list">
+                      <div class="gallery-list-empty">Spara projektet och ladda sedan upp fler bilder här.</div>
+                    </div>
+                  </div>
+                </form>
+
+                <p class="status-message" id="project-status"></p>
+              </section>
+            </div>
+          </section>
+
+          <section class="workspace-card">
+            <div class="workspace-heading">
+              <h2>Medarbetare</h2>
+            </div>
+
+            <div class="workspace-grid">
+              <aside class="project-list-panel">
+                <div class="panel-header">
+                  <div>
+                    <p class="eyebrow">Lista</p>
+                    <h2>Personer</h2>
+                  </div>
+                  <button id="new-employee-button" class="secondary-button" type="button">+ Ny</button>
+                </div>
+
+                <div class="project-list" id="employee-list"></div>
+              </aside>
+
+              <section class="editor-panel">
+                <div class="panel-header">
+                  <div>
+                    <p class="eyebrow">Redigera</p>
+                    <h2 id="employee-editor-title">Ny medarbetare</h2>
+                  </div>
+                  <div class="editor-actions">
+                    <button id="delete-employee-button" class="danger-button" type="button">Ta bort</button>
+                    <button id="save-employee-button" class="primary-button" type="button">Spara</button>
+                  </div>
+                </div>
+
+                <form id="employee-form" class="editor-form">
+                  <input id="employee-sort-order" name="sort_order" type="hidden" value="0" />
+                  <input id="employee-photo-url" name="photo_url" type="hidden" />
+                  <input id="employee-photo-url-secondary" type="hidden" />
+
+                  <div class="field-row field-row-two">
+                    <label>
+                      <span>Namn</span>
+                      <input id="employee-name" name="name" type="text" required />
+                    </label>
+
+                    <label>
+                      <span>Roll</span>
+                      <input id="employee-role" name="role" type="text" />
+                    </label>
+                  </div>
+
+                  <div class="field-row">
+                    <label>
+                      <span>E-post</span>
+                      <input id="employee-email" name="email" type="email" />
+                    </label>
+
+                    <label>
+                      <span>Telefon</span>
+                      <input id="employee-phone" name="phone" type="text" />
+                    </label>
+                  </div>
+
+                  <div class="field-row field-row-two">
+                    <label>
+                      <span>Aktiv</span>
+                      <select id="employee-active" name="is_active">
+                        <option value="true">Ja</option>
+                        <option value="false">Nej</option>
+                      </select>
+                    </label>
+                  </div>
+
+                  <label>
+                    <span>Presentation</span>
+                    <textarea id="employee-bio" name="bio" rows="5"></textarea>
+                  </label>
+
+                  <div class="media-panel">
+                    <div class="media-header">
+                      <div>
+                        <span class="eyebrow">Portratt</span>
+                        <h3>Medarbetarbild</h3>
+                      </div>
+                    </div>
+
+                    <div class="field-row media-row">
+                      <label class="media-upload">
+                        <span>Ladda upp bild</span>
+                        <input id="employee-image-file" type="file" accept="image/png,image/jpeg,image/webp,image/gif" />
+                      </label>
+                    </div>
+
+                    <button id="upload-employee-image-button" class="secondary-button" type="button">Ladda upp</button>
+
+                    <div class="image-preview" id="employee-image-preview"></div>
+                  </div>
+                </form>
+
+                <p class="status-message" id="employee-status"></p>
+              </section>
+            </div>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="admin.js"></script>
+  </body>
+</html>

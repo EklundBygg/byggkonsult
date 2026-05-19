@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="sv">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Eklund Byggkonsult | Montage, byggservice och tillbyggnader</title>
+    <meta
+      name="description"
+      content="Eklund Byggkonsult arbetar med montage, byggservice, tillbyggnader och prefabricerade träkonstruktioner i Mellansverige."
+    />
+    <script>
+      (() => {
+        try {
+          const raw = window.localStorage.getItem("eklund_site_settings_hero");
+          if (!raw) return;
+
+          const settings = JSON.parse(raw);
+          const imageUrl = (settings.hero_image_url || "").trim();
+          const imagePosition = (settings.hero_image_position || "50% 50%").trim();
+
+          if (imageUrl) {
+            const preloader = new Image();
+            preloader.onload = () => {
+              const escapedUrl = imageUrl.replace(/["\\]/g, "\\$&");
+              document.documentElement.style.setProperty("--hero-image-url", `url("${escapedUrl}")`);
+              document.documentElement.classList.add("hero-image-ready");
+            };
+            preloader.src = imageUrl;
+          }
+
+          document.documentElement.style.setProperty("--hero-image-position", imagePosition || "50% 50%");
+        } catch (_error) {}
+      })();
+    </script>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="site-shell">
+      <aside class="section-rail" aria-label="Aktiv sektion">
+        <span class="section-rail-line"></span>
+        <span class="section-rail-current" data-section-current>START</span>
+      </aside>
+
+      <header class="topbar">
+        <a class="brand" href="#top" aria-label="Eklund Byggkonsult startsida">
+          <img class="brand-logo-mark" src="Baralogo60px.png" alt="Eklund Byggkonsult" />
+          <img class="brand-logo-text" src="Baratext50px.png" alt="" aria-hidden="true" />
+        </a>
+
+        <nav class="nav" aria-label="Huvudnavigation">
+          <a href="#tjanster">Tjänster</a>
+          <a href="#projekt">Projekt</a>
+          <a href="#om-oss">Om företaget</a>
+          <a href="#medarbetare">Medarbetare</a>
+          <a class="nav-cta" href="#kontakt">Kontakta oss</a>
+        </nav>
+      </header>
+
+      <main id="top">
+        <section class="hero">
+          <div class="hero-backdrop" aria-hidden="true">
+            <div class="hero-grid"></div>
+            <div class="hero-blueprint"></div>
+          </div>
+
+          <div class="hero-copy">
+            <h1 class="hero-title">
+              <span>Vi gör det</span>
+              <span>enkelt att</span>
+              <span class="hero-title-accent">bygga!</span>
+            </h1>
+            <p class="lead">
+              Förhoppningsvis kan vi hjälpa dig att göra verklighet av dina
+              byggidéer. Med vår personal, vårt kunnande och våra system
+              förenklas såväl planeringsarbetet som själva byggandet ute på
+              arbetsplatsen. Funderar du på att bygga och vill komma vidare med
+              dina byggplaner har du kommit till rätt ställe. Kontakta oss i
+              dag!
+            </p>
+
+            <div class="hero-actions">
+              <a class="button button-primary" href="#kontakt">Kontakta oss</a>
+              <a class="button button-secondary" href="#tjanster">Se våra tjänster</a>
+            </div>
+
+            <ul class="hero-points" aria-label="Viktiga styrkor">
+              <li>Prefabricerade träkonstruktioner och smarta byggsystem</li>
+              <li>Större montage, byggservice och tillbyggnader</li>
+              <li>Hjälp från planering till färdig lösning</li>
+            </ul>
+          </div>
+
+        </section>
+
+        <section class="section" id="tjanster">
+          <div class="section-banner section-banner-services">
+            <div class="section-banner-overlay"></div>
+            <div class="section-banner-content">
+              <p class="section-banner-label">Tjänster</p>
+              <div class="section-banner-body">
+                <h2>Vi är <span class="section-banner-accent">träproffs.</span></h2>
+                <p>
+                  Specialister på trä, CLT och montage med precision i varje steg.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-heading">
+            <p>
+              Vi är specialister på avancerade träkonstruktioner och levererar
+              montagelösningar med högsta precision. Med djup kompetens inom trä
+              och korslimmat trä (CLT) tar vi oss an projekt som kräver både
+              erfarenhet och teknisk expertis. Vi arbetar i moderna 3Dmodeller
+              för att säkerställa millimeterexakthet, smidigare processer och
+              ett helt förutsägbart resultat. Vårt team hanterar komplexa
+              byggnationer där kvalitet, säkerhet och effektivt genomförande är
+              avgörande. När du vill ha en trygg, tekniskt kunnig och
+              framtidssäkrad montagepartner är vi det självklara valet.
+            </p>
+          </div>
+
+          <div class="service-grid">
+            <article class="service-card">
+              <h3>Stora träkonstruktioner</h3>
+              <p>
+                Vi arbetar med avancerade träkonstruktioner där precision,
+                säkerhet och tekniskt kunnande är avgörande för slutresultatet.
+              </p>
+            </article>
+            <article class="service-card">
+              <h3>CLT och limträ</h3>
+              <p>
+                Specialistkompetens inom trä och korslimmat trä gör att vi kan
+                ta oss an projekt som kräver både erfarenhet och noggrannhet.
+              </p>
+            </article>
+            <article class="service-card">
+              <h3>Alla typer av uppdrag</h3>
+              <p>
+                För oss är inget uppdrag för litet. Vår mångsidighet och
+                förmåga att anpassa oss efter varje kunds behov är en av
+                anledningarna till att många väljer att återkomma till oss.
+              </p>
+            </article>
+            <article class="service-card">
+              <h3>Trygg montagepartner</h3>
+              <p>
+                När du vill ha en trygg, tekniskt kunnig och framtidssäkrad
+                montagepartner är vi det självklara valet.
+              </p>
+            </article>
+          </div>
+
+          <div class="subsection-heading" id="process">
+            <h3>Vi är <span class="section-banner-accent">mångsidiga.</span></h3>
+            <p>
+              Mångsidighet som skapar trygghet i varje projekt. Vi är en
+              flexibel och lösningsorienterad partner som täcker hela
+              byggprocessen, från tidiga idéer till färdigt resultat. Vår styrka
+              ligger i bredden: vi kombinerar praktisk erfarenhet med teknisk
+              kunskap och erbjuder allt från projektering och kalkyl till
+              avancerat montage, byggledning och specialkonstruktioner. Genom
+              att arbeta med moderna 3Dmodeller kan vi visualisera, analysera
+              och kvalitetssäkra varje detalj innan produktion, vilket skapar
+              precision, trygghet och effektivitet. Oavsett om projektet är
+              litet eller komplext tar vi ansvar, hittar lösningar och levererar
+              med hög kvalitet. Med Eklund Byggkonsult får du en mångsidig
+              partner som alltid sätter helheten och kunden i fokus.
+            </p>
+          </div>
+
+          <div class="timeline">
+            <article>
+              <h3>Projektering och kalkyl</h3>
+              <p>
+                Vi kombinerar praktisk erfarenhet med teknisk kunskap och
+                erbjuder stöd i allt från projektering och kalkyl till
+                byggledning och specialkonstruktioner.
+              </p>
+            </article>
+            <article>
+              <h3>Byggledning och montage</h3>
+              <p>
+                Oavsett om projektet är litet eller komplext tar vi ansvar,
+                hittar lösningar och levererar med hög kvalitet.
+              </p>
+            </article>
+            <article>
+              <h3>Precision i varje detalj</h3>
+              <p>
+                Genom moderna 3D-modeller kan vi visualisera, analysera och
+                kvalitetssäkra varje detalj innan produktion.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="projekt">
+          <div class="section-banner section-banner-projects">
+            <div class="section-banner-overlay"></div>
+            <div class="section-banner-content">
+              <p class="section-banner-label">Projekt</p>
+              <div class="section-banner-body">
+                <h2>Våra <span class="section-banner-accent">projekt.</span></h2>
+                <p>
+                  Från millimeterprecision till storskaliga helhetslösningar ute i verkligheten.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-heading">
+            <p>
+              På C. Eklund Bygg & Byggkonsult kombinerar vi gediget hantverk med
+              modern teknik och ett ovanligt brett kompetensspann. Våra projekt
+              spänner över hela skalan: från avancerade montage i limträ och
+              CLT, prefabricerade konstruktioner och stora totalentreprenader i
+              mångmiljonklassen till mindre men lika viktiga uppdrag som
+              garagebyggen, attefallare och andra smarta småbyggnationer.
+            </p>
+            <p>
+              Med ett starkt team, återkommande underentreprenörer och väl
+              inarbetade arbetssätt tar vi oss an både små och stora projekt med
+              samma engagemang, precision och kvalitet. Här hittar du exempel på
+              hur vår mångsidighet kommer till uttryck i praktiken.
+            </p>
+          </div>
+
+          <ul class="project-types" aria-label="Exempel på projekttyper">
+            <li><button class="project-type-button" type="button" data-project-type="kommersiella-byggnader">Kommersiella byggnader</button></li>
+            <li><button class="project-type-button" type="button" data-project-type="lager">Lager</button></li>
+            <li><button class="project-type-button" type="button" data-project-type="kontor">Kontor</button></li>
+            <li><button class="project-type-button" type="button" data-project-type="maskinhall">Maskinhall</button></li>
+            <li><button class="project-type-button" type="button" data-project-type="garage">Garage</button></li>
+            <li><button class="project-type-button" type="button" data-project-type="attefallare">Attefallare</button></li>
+            <li><button class="project-type-button" type="button" data-project-type="altaner">Altaner</button></li>
+          </ul>
+
+          <div class="service-grid projects-grid" id="projects-grid">
+            <article class="service-card project-card project-card-placeholder">
+              <h3>Projekt laddas...</h3>
+              <p>Här kommer era publicerade projekt att visas automatiskt från admin-delen.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section about" id="om-oss">
+          <div class="section-banner section-banner-about">
+            <div class="section-banner-overlay"></div>
+            <div class="section-banner-content">
+              <p class="section-banner-label">Om företaget</p>
+              <div class="section-banner-body">
+                <h2>C. Eklund Bygg & Byggkonsult - från idé till etablerat <span class="section-banner-accent">specialistföretag.</span></h2>
+              </div>
+            </div>
+          </div>
+
+          <div class="about-panel">
+            <p>
+              C. Eklund Bygg & Byggkonsult AB grundades 2019, när Christer
+              Eklund valde att samla sin långa erfarenhet inom träbyggnation,
+              montageledning och byggproduktion i ett eget bolag. Bolaget
+              registrerades i juni 2019 och startades med en tydlig ambition:
+              att bygga ett företag där gediget hantverk möter teknisk
+              kompetens, och där varje projekt får den noggrannhet och omsorg
+              det förtjänar.
+            </p>
+            <p>
+              Från början var verksamheten liten och fokuserad, men riktningen
+              var glasklar. C. Eklund Bygg & Byggkonsult skulle specialisera sig
+              på projekteringsledning, byggledning, byggmekanik och montage av
+              prefabricerade träkonstruktioner. Christers bakgrund inom montage
+              av trä och limträ gav företaget en stark position direkt: man
+              kunde ta sig an både tekniskt avancerade och tidskritiska uppdrag,
+              särskilt inom trä- och CLTbyggande där få aktörer hade samma
+              kompetens.
+            </p>
+            <p>
+              Under de första åren utvecklades företaget snabbt. Man tog fler
+              uppdrag, flera projekt där även utförandet skulle ingå. Man byggde
+              ett starkt team och utökade kontaktnätet inom Mellansverige. Redan
+              tidigt började man arbeta med prefabricering, och senare
+              etablerades en egen tillverkningshall där väggblock, taksektioner
+              och andra trämoduler producerades. Det blev en viktig milstolpe,
+              både för att höja kvaliteten och för att effektivisera hela
+              byggprocessen.
+            </p>
+            <p>
+              Verksamheten kompletterades också med byggservice, tillbyggnader
+              och totalentreprenader, vilket gjorde bolaget alltmer mångsidigt.
+              Kunderna blev både större bostadsbolag, företagare och
+              privatkunder, och projektportföljen började spänna över allt från
+              kontorstillbyggnader till kommersiella lokaler, bostadshus och
+              specialmontage.
+            </p>
+            <p>
+              I takt med att projekten blev mer komplexa började företaget arbeta
+              alltmer med moderna 3Dmodeller och digital projektsamordning för
+              att säkerställa millimeterprecision och undvika kostsamma fel längs
+              vägen. Det gav inte bara bättre kontroll utan också förtroende hos
+              kunderna, som kunde se exakt hur konstruktionerna skulle byggas.
+              Det här sättet att kombinera klassiskt hantverk med modern teknik
+              blev snabbt ett kännetecken för Eklund Byggkonsult.
+            </p>
+            <p>
+              Företaget, som en gång startade med en person, har i dag vuxit
+              till ett sammansvetsat team med erfarna träarbetare,
+              montagepersonal och byggteknisk kompetens. Verksamheten
+              fortsätter att utvecklas i takt med efterfrågan, utan ambition
+              att bli störst. I stället ligger fokus på hållbar tillväxt, stark
+              laganda och att varje ny medarbetare bidrar med rätt kompetens
+              och värderingar.
+            </p>
+            <p>
+              En viktig del av företagets styrka är de återkommande
+              underentreprenörer som arbetar tillsammans med teamet år efter år.
+              Dessa långsiktiga samarbeten skapar trygghet, effektivitet och en
+              hög nivå av samspelt yrkesskicklighet ute på projekten. Flera i
+              teamet har specialkunnande inom limträ, korslimmat trä (CLT),
+              prefabricering och tunga montage, vilket gör att företaget kan ta
+              sig an både stora och ansvarstyngda uppdrag.
+            </p>
+            <p>
+              Den kombinerade kompetensen mellan egna medarbetare och
+              väletablerade samarbetspartners gör att C. Eklund Bygg &
+              Byggkonsult kan leverera projekt med hög kvalitet, precision och
+              pålitlighet, oavsett omfattning eller komplexitet.
+            </p>
+            <p>
+              Företaget har på kort tid utvecklats från ett nystartat bolag till
+              en etablerad och pålitlig aktör i branschen. Under 2025 nådde
+              verksamheten en omsättning på 89,7 miljoner kronor, med ett
+              resultat på cirka 6 miljoner kronor, ett tydligt bevis på att
+              kunderna uppskattar kvaliteten, kompetensen och leveranssäkerheten
+              i varje projekt.
+            </p>
+
+            <ul class="about-list" aria-label="Företagets styrkor">
+              <li>Specialistkunnande inom trä, limträ och CLT</li>
+              <li>Egen prefabriceringshall</li>
+              <li>Avancerad projekterings- och byggledningskompetens</li>
+              <li>Ett starkt team med bred praktisk erfarenhet</li>
+              <li>Stabil ekonomi och stadigt växande kundbas</li>
+            </ul>
+
+            <p>
+              Företaget är dessutom känt för att vara lösningsorienterat,
+              pålitligt och engagerat, oavsett om det gäller stora montage,
+              totalentreprenader, tillbyggnader eller specialanpassade
+              konstruktioner.
+            </p>
+          </div>
+
+        </section>
+
+        <section class="section" id="medarbetare">
+          <div class="section-banner section-banner-team">
+            <div class="section-banner-overlay"></div>
+            <div class="section-banner-content">
+              <p class="section-banner-label">Medarbetare</p>
+              <div class="section-banner-body">
+                <h2><span class="section-banner-accent">Medarbetarna</span> bakom projekten.</h2>
+                <p>
+                  Teamet som bär idéer hela vägen från planering till färdig lösning.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-heading">
+            <p>
+              Här kan du möta teamet bakom Eklund Byggkonsult. Tillsammans
+              representerar de den erfarenhet, yrkesskicklighet och
+              problemlösningsförmåga som präglar varje uppdrag vi tar oss an.
+              Med bred kompetens inom träbyggnation, montage och byggledning
+              arbetar vi nära varandra för att skapa trygga processer, hög
+              kvalitet och lösningar som fungerar hela vägen från planering
+              till färdigt resultat.
+            </p>
+          </div>
+
+          <div class="service-grid employees-grid" id="employees-grid">
+            <article class="service-card employee-card employee-card-placeholder">
+              <h3>Medarbetare laddas...</h3>
+              <p>Här kommer era aktiva medarbetare att visas automatiskt från admin-delen.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section contact" id="kontakt">
+          <div class="section-banner section-banner-contact">
+            <div class="section-banner-overlay"></div>
+            <div class="section-banner-content">
+              <p class="section-banner-label">Kontakt</p>
+              <div class="section-banner-body">
+                <h2>Kontakta oss - vi <span class="section-banner-accent">hjälper dig</span> hela vägen.</h2>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-heading">
+            <p>
+              Oavsett om du står inför ett komplext byggprojekt, behöver
+              specialistkunnande inom trä och CLT eller söker en mångsidig
+              partner som tar ansvar för helheten, är vi här för att hjälpa
+              dig. På Eklund Byggkonsult värdesätter vi tydlig kommunikation,
+              snabb återkoppling och lösningar som fungerar i verkligheten. Hör
+              av dig till oss så tar vi nästa steg tillsammans, från första idé
+              till färdigt resultat.
+            </p>
+          </div>
+
+          <div class="contact-card">
+            <div>
+              <p class="contact-label">Växel</p>
+              <a href="tel:+4686657800">08-665 78 00</a>
+            </div>
+            <div>
+              <p class="contact-label">E-post</p>
+              <a href="mailto:info@eklundbyggkonsult.se">info@eklundbyggkonsult.se</a>
+            </div>
+          </div>
+        </section>
+
+        <div class="site-admin-access" aria-label="Administrativ åtkomst">
+          <a class="site-admin-link" href="admin.html">Admin</a>
+        </div>
+      </main>
+
+    </div>
+
+    <div class="sticky-footer" aria-label="Snabbkontakt">
+      <div class="sticky-footer-inner">
+        <div class="sticky-footer-item">
+          <span class="sticky-footer-label">Telefon</span>
+          <a href="tel:+4686657800">08-665 78 00</a>
+        </div>
+        <div class="sticky-footer-item">
+          <span class="sticky-footer-label">E-post</span>
+          <a href="mailto:info@eklundbyggkonsult.se">info@eklundbyggkonsult.se</a>
+        </div>
+        <div class="sticky-footer-item sticky-footer-item-wide">
+          <span class="sticky-footer-label">Adress</span>
+          <p>Björnvägen 5, 746 35 Bålsta</p>
+        </div>
+        <div class="sticky-footer-item">
+          <span class="sticky-footer-label">Orgnr</span>
+          <p>559208-0807</p>
+        </div>
+        <a class="sticky-footer-cta" href="#kontakt">Kontakta oss</a>
+      </div>
+    </div>
+
+    <dialog class="project-modal" id="project-modal">
+      <div class="project-modal-inner">
+        <button class="project-modal-close" id="project-modal-close" type="button" aria-label="Stäng projekt">
+          Stäng
+        </button>
+        <div class="project-modal-media" id="project-modal-media"></div>
+        <div class="project-modal-content">
+          <p class="eyebrow">Projekt</p>
+          <h2 id="project-modal-title"></h2>
+          <p id="project-modal-short"></p>
+          <div id="project-modal-body"></div>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog class="project-modal employee-modal" id="employee-modal">
+      <div class="project-modal-inner">
+        <button class="project-modal-close" id="employee-modal-close" type="button" aria-label="Stäng medarbetare">
+          Stäng
+        </button>
+        <div class="project-modal-media" id="employee-modal-media"></div>
+        <div class="project-modal-content">
+          <p class="eyebrow">Medarbetare</p>
+          <h2 id="employee-modal-title"></h2>
+          <p id="employee-modal-role"></p>
+          <div id="employee-modal-body"></div>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog class="project-modal project-type-modal" id="project-type-modal">
+      <div class="project-type-modal-inner">
+        <button class="project-modal-close" id="project-type-modal-close" type="button" aria-label="Stäng projekttyp">
+          Stäng
+        </button>
+        <div class="project-modal-content project-type-modal-content">
+          <p class="eyebrow">Projekttyp</p>
+          <h2 id="project-type-modal-title"></h2>
+          <div id="project-type-modal-body"></div>
+        </div>
+      </div>
+    </dialog>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
