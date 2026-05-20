@@ -537,8 +537,7 @@ const loadProjects = async () => {
     .select("id, title, slug, thumbnail_url, short_description, long_description, published_at, created_at")
     .eq("is_published", true)
     .order("published_at", { ascending: false, nullsFirst: false })
-    .order("created_at", { ascending: false })
-    .limit(6);
+    .order("created_at", { ascending: false });
 
   if (error) {
     if (projectsGrid) {
