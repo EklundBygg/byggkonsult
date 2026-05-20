@@ -86,6 +86,7 @@ const heroBackdrop = document.querySelector(".hero-backdrop");
 const stickyFooter = document.querySelector(".sticky-footer");
 const projectTypeButtons = document.querySelectorAll("[data-project-type]");
 const projectsGrid = document.getElementById("projects-grid");
+const projectsToggleButton = document.getElementById("projects-toggle-button");
 const employeesGrid = document.getElementById("employees-grid");
 const projectModal = document.getElementById("project-modal");
 const projectModalClose = document.getElementById("project-modal-close");
@@ -103,6 +104,9 @@ const projectTypeModal = document.getElementById("project-type-modal");
 const projectTypeModalClose = document.getElementById("project-type-modal-close");
 const projectTypeModalTitle = document.getElementById("project-type-modal-title");
 const projectTypeModalBody = document.getElementById("project-type-modal-body");
+const PROJECTS_PREVIEW_COUNT = 5;
+let allProjects = [];
+let projectsExpanded = false;
 
 const updateStickyFooterVisibility = () => {
   if (!stickyFooter) return;
@@ -165,6 +169,22 @@ const paragraphize = (text = "") =>
 
 const uniqueImages = (images) =>
   [...new Set((images || []).filter(Boolean).map((image) => image.trim()).filter(Boolean))];
+
+const sortProjects = (projects = []) =>
+  [...projects].sort((a, b) => {
+    const sortOrderA = Number.isFinite(Number(a.sort_order)) ? Number(a.sort_order) : Number.MAX_SAFE_INTEGER;
+    const sortOrderB = Number.isFinite(Number(b.sort_order)) ? Number(b.sort_order) : Number.MAX_SAFE_INTEGER;
+
+    if (sortOrderA !== sortOrderB) return sortOrderA - sortOrderB;
+
+    const publishedAtA = a.published_at ? new Date(a.published_at).getTime() : 0;
+    const publishedAtB = b.published_at ? new Date(b.published_at).getTime() : 0;
+    if (publishedAtA !== publishedAtB) return publishedAtB - publishedAtA;
+
+    const createdAtA = a.created_at ? new Date(a.created_at).getTime() : 0;
+    const createdAtB = b.created_at ? new Date(b.created_at).getTime() : 0;
+    return createdAtB - createdAtA;
+  });
 
 const keywordToPercent = {
   left: "0%",
@@ -438,6 +458,18 @@ projectTypeButtons.forEach((button) => {
   });
 });
 
+const updateProjectsToggle = (totalCount) => {
+  if (!projectsToggleButton) return;
+
+  const shouldShowToggle = totalCount > PROJECTS_PREVIEW_COUNT;
+  projectsToggleButton.hidden = !shouldShowToggle;
+
+  if (!shouldShowToggle) return;
+
+  projectsToggleButton.textContent = projectsExpanded ? "Visa färre projekt" : "Visa fler projekt";
+  projectsToggleButton.setAttribute("aria-expanded", projectsExpanded ? "true" : "false");
+};
+
 const renderProjects = (projects) => {
   if (!projectsGrid) return;
 
@@ -448,6 +480,7 @@ const renderProjects = (projects) => {
         <p>När ni lägger in projekt i admin kommer de att visas här automatiskt.</p>
       </article>
     `;
+    updateProjectsToggle(0);
     return;
   }
 
@@ -478,6 +511,13 @@ const renderProjects = (projects) => {
 
     projectsGrid.appendChild(card);
   });
+
+  updateProjectsToggle(allProjects.length);
+};
+
+const renderVisibleProjects = () => {
+  const visibleProjects = projectsExpanded ? allProjects : allProjects.slice(0, PROJECTS_PREVIEW_COUNT);
+  renderProjects(visibleProjects);
 };
 
 const renderEmployees = (employees) => {
@@ -534,8 +574,9 @@ const renderEmployees = (employees) => {
 const loadProjects = async () => {
   const { data, error } = await supabaseClient
     .from("projects")
-    .select("id, title, slug, thumbnail_url, short_description, long_description, published_at, created_at")
+    .select("id, title, slug, thumbnail_url, short_description, long_description, published_at, created_at, sort_order")
     .eq("is_published", true)
+    .order("sort_order", { ascending: true, nullsFirst: false })
     .order("published_at", { ascending: false, nullsFirst: false })
     .order("created_at", { ascending: false });
 
@@ -551,7 +592,7 @@ const loadProjects = async () => {
     return;
   }
 
-  const projects = data || [];
+  const projects = sortProjects(data || []);
   const projectIds = projects.map((project) => project.id).filter(Boolean);
 
   if (projectIds.length) {
@@ -577,8 +618,19 @@ const loadProjects = async () => {
     }
   }
 
-  renderProjects(projects);
+  allProjects = projects;
+  projectsExpanded = false;
+  renderVisibleProjects();
 };
+
+projectsToggleButton?.addEventListener("click", () => {
+  projectsExpanded = !projectsExpanded;
+  renderVisibleProjects();
+
+  if (!projectsExpanded) {
+    document.getElementById("projekt")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+});
 
 const loadEmployees = async () => {
   const { data, error } = await supabaseClient

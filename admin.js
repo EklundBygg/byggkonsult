@@ -65,6 +65,7 @@ let currentProjects = [];
 let currentProjectImages = [];
 let currentEmployeeId = null;
 let currentEmployees = [];
+let draggedProjectId = null;
 let currentSiteSettings = {
   hero_image_url: "",
   hero_image_position: "50% 50%",
@@ -141,6 +142,29 @@ const getNextEmployeeSortOrder = () => {
 
   return maxExistingSortOrder + 1;
 };
+
+const sortProjects = (projects = []) =>
+  [...projects].sort((a, b) => {
+    const sortOrderA = Number.isFinite(Number(a.sort_order)) ? Number(a.sort_order) : Number.MAX_SAFE_INTEGER;
+    const sortOrderB = Number.isFinite(Number(b.sort_order)) ? Number(b.sort_order) : Number.MAX_SAFE_INTEGER;
+
+    if (sortOrderA !== sortOrderB) return sortOrderA - sortOrderB;
+
+    const publishedAtA = a.published_at ? new Date(a.published_at).getTime() : 0;
+    const publishedAtB = b.published_at ? new Date(b.published_at).getTime() : 0;
+    if (publishedAtA !== publishedAtB) return publishedAtB - publishedAtA;
+
+    const createdAtA = a.created_at ? new Date(a.created_at).getTime() : 0;
+    const createdAtB = b.created_at ? new Date(b.created_at).getTime() : 0;
+    return createdAtB - createdAtA;
+  });
+
+const getNextProjectSortOrder = () =>
+  currentProjects.reduce((highest, project) => {
+    const sortOrder = Number(project.sort_order);
+    if (!Number.isFinite(sortOrder)) return highest;
+    return Math.max(highest, sortOrder);
+  }, -1) + 1;
 
 const formatDateInput = (value) => {
   if (!value) return "";
@@ -316,7 +340,7 @@ const getProjectPayload = () => ({
   long_description: projectLongDescription.value.trim() || null,
   published_at: projectPublishedAt.value ? `${projectPublishedAt.value}T12:00:00` : null,
   is_published: projectPublished.value === "true",
-  sort_order: Number(projectSortOrder.value || 0),
+  sort_order: currentProjectId ? Number(projectSortOrder.value || 0) : getNextProjectSortOrder(),
 });
 
 const saveDraft = (key, payload) => {
@@ -371,7 +395,7 @@ const resetForm = () => {
   projectSlug.value = "";
   projectPublished.value = "true";
   projectPublishedAt.value = getDefaultPublishedAt();
-  projectSortOrder.value = "0";
+  projectSortOrder.value = String(getNextProjectSortOrder());
   projectShortDescription.value = "";
   projectLongDescription.value = "";
   projectThumbnailUrl.value = "";
@@ -561,17 +585,20 @@ const renderProjectList = () => {
 
   projectList.innerHTML = "";
 
-  currentProjects.forEach((project) => {
+  sortProjects(currentProjects).forEach((project, index) => {
     const item = document.createElement("button");
     item.type = "button";
     item.className = "project-list-item";
+    item.draggable = true;
+    item.dataset.projectId = project.id;
     if (project.id === currentProjectId) {
       item.classList.add("is-active");
     }
 
     item.innerHTML = `
+      <span class="project-list-drag" aria-hidden="true">≡</span>
       <strong>${project.title}</strong>
-      <small>${project.is_published ? "Publicerad" : "Ej publicerad"}${project.published_at ? ` • ${new Date(project.published_at).toLocaleDateString("sv-SE")}` : ""}</small>
+      <small>${index + 1}. ${project.is_published ? "Publicerad" : "Ej publicerad"}${project.published_at ? ` • ${new Date(project.published_at).toLocaleDateString("sv-SE")}` : ""}</small>
     `;
 
     item.addEventListener("click", () => {
@@ -580,8 +607,83 @@ const renderProjectList = () => {
       renderProjectList();
     });
 
+    item.addEventListener("dragstart", (event) => {
+      draggedProjectId = project.id;
+      item.classList.add("is-dragging");
+      event.dataTransfer.effectAllowed = "move";
+      event.dataTransfer.setData("text/plain", project.id);
+    });
+
+    item.addEventListener("dragover", (event) => {
+      event.preventDefault();
+      if (!draggedProjectId || draggedProjectId === project.id) return;
+      event.dataTransfer.dropEffect = "move";
+      item.classList.add("is-drop-target");
+    });
+
+    item.addEventListener("dragleave", () => {
+      item.classList.remove("is-drop-target");
+    });
+
+    item.addEventListener("drop", async (event) => {
+      event.preventDefault();
+      item.classList.remove("is-drop-target");
+      if (!draggedProjectId || draggedProjectId === project.id) return;
+      await reorderProjects(draggedProjectId, project.id);
+    });
+
+    item.addEventListener("dragend", () => {
+      draggedProjectId = null;
+      document.querySelectorAll(".project-list-item").forEach((element) => {
+        element.classList.remove("is-dragging", "is-drop-target");
+      });
+    });
+
     projectList.appendChild(item);
   });
+};
+
+const reorderProjects = async (draggedId, targetId) => {
+  const orderedProjects = sortProjects(currentProjects);
+  const fromIndex = orderedProjects.findIndex((project) => project.id === draggedId);
+  const toIndex = orderedProjects.findIndex((project) => project.id === targetId);
+
+  if (fromIndex === -1 || toIndex === -1 || fromIndex === toIndex) return;
+
+  const reorderedProjects = [...orderedProjects];
+  const [movedProject] = reorderedProjects.splice(fromIndex, 1);
+  reorderedProjects.splice(toIndex, 0, movedProject);
+
+  currentProjects = reorderedProjects.map((project, index) => ({
+    ...project,
+    sort_order: index,
+  }));
+
+  if (currentProjectId) {
+    const activeProject = currentProjects.find((project) => project.id === currentProjectId);
+    if (activeProject) {
+      projectSortOrder.value = String(activeProject.sort_order ?? 0);
+    }
+  }
+
+  renderProjectList();
+  setStatus(projectStatus, "Sparar ny projektordning...");
+
+  const updates = currentProjects.map((project, index) =>
+    supabaseClient.from("projects").update({ sort_order: index }).eq("id", project.id)
+  );
+
+  const results = await Promise.all(updates);
+  const failedResult = results.find((result) => result.error);
+
+  if (failedResult?.error) {
+    setStatus(projectStatus, failedResult.error.message, true);
+    await loadProjects();
+    return;
+  }
+
+  setStatus(projectStatus, "Projektordningen är sparad.");
+  await loadProjects();
 };
 
 const renderEmployeeList = () => {
@@ -618,6 +720,7 @@ const loadProjects = async () => {
   const { data, error } = await supabaseClient
     .from("projects")
     .select("*")
+    .order("sort_order", { ascending: true, nullsFirst: false })
     .order("published_at", { ascending: false, nullsFirst: false })
     .order("created_at", { ascending: false });
 
@@ -626,7 +729,7 @@ const loadProjects = async () => {
     return;
   }
 
-  currentProjects = data || [];
+  currentProjects = sortProjects(data || []);
   renderProjectList();
 
   if (currentProjectId) {

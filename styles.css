@@ -798,6 +798,16 @@ h3 {
   gap: 0.75rem;
 }
 
+.projects-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.projects-toggle[hidden] {
+  display: none;
+}
+
 .employees-grid {
   grid-template-columns: repeat(5, minmax(0, 1fr));
   align-items: stretch;
@@ -806,11 +816,13 @@ h3 {
 
 .project-card {
   display: grid;
-  grid-template-rows: auto minmax(3.4rem, auto) minmax(7.2rem, auto);
+  grid-template-rows: auto auto 1fr;
   align-content: start;
-  gap: 0.7rem;
+  gap: 0.6rem;
+  height: 22.5rem;
   padding: 0.85rem;
   cursor: pointer;
+  overflow: hidden;
 }
 
 .project-card-media {
@@ -835,12 +847,23 @@ h3 {
   margin: 0;
   font-size: 1rem;
   line-height: 1.15;
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }
 
 .project-card-text {
   margin: 0;
   font-size: 0.9rem;
   line-height: 1.5;
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5;
+  max-height: calc(5 * 0.9rem * 1.5);
+  -webkit-mask-image: linear-gradient(180deg, #000 70%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 70%, transparent 100%);
 }
 
 .employee-card {
@@ -1196,8 +1219,6 @@ h3 {
 
 .project-modal-media {
   align-self: start;
-  aspect-ratio: 4 / 3;
-  min-height: 320px;
   display: grid;
   gap: 0.8rem;
   align-content: start;
@@ -1208,7 +1229,7 @@ h3 {
 .project-modal-main-image {
   display: grid;
   place-items: center;
-  height: clamp(260px, 34vw, 420px);
+  max-height: min(62vh, 420px);
   overflow: hidden;
   border-radius: 4px;
   background: #121916;
@@ -1225,7 +1246,7 @@ h3 {
 
 .project-modal-main-image img {
   width: 100%;
-  height: 100%;
+  height: auto;
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
@@ -1490,6 +1511,11 @@ h3 {
 
   .projects-grid {
     grid-template-columns: 1fr;
+  }
+
+  .project-card {
+    height: auto;
+    min-height: 20rem;
   }
 
   .employees-grid {
