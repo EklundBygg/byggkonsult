@@ -806,6 +806,8 @@ h3 {
 
 .project-card {
   display: grid;
+  grid-template-rows: auto minmax(3.4rem, auto) minmax(7.2rem, auto);
+  align-content: start;
   gap: 0.7rem;
   padding: 0.85rem;
   cursor: pointer;
@@ -832,6 +834,7 @@ h3 {
 .project-card-title {
   margin: 0;
   font-size: 1rem;
+  line-height: 1.15;
 }
 
 .project-card-text {
