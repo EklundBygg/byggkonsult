@@ -829,14 +829,14 @@ h3 {
   aspect-ratio: 16 / 10;
   overflow: hidden;
   border-radius: 4px;
-  background: rgba(255, 255, 255, 0.04);
+  background: #121916;
 }
 
 .project-card-media img {
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .project-card-placeholder {
@@ -1189,7 +1189,7 @@ h3 {
 .project-modal-inner {
   position: relative;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   align-items: start;
 }
 
@@ -1229,9 +1229,9 @@ h3 {
 .project-modal-main-image {
   display: grid;
   place-items: center;
-  aspect-ratio: 4 / 3;
-  min-height: 260px;
-  max-height: min(62vh, 420px);
+  width: 100%;
+  height: min(64vh, 560px);
+  min-height: 420px;
   overflow: hidden;
   border-radius: 4px;
   background: #121916;
@@ -1248,7 +1248,7 @@ h3 {
 
 .project-modal-main-image img {
   width: 100%;
-  height: auto;
+  height: 100%;
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
@@ -1530,6 +1530,11 @@ h3 {
 
   .project-modal-content {
     padding: 1.25rem;
+  }
+
+  .project-modal-main-image {
+    height: min(54vh, 380px);
+    min-height: 260px;
   }
 }
 
