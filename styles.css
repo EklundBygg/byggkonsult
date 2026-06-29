@@ -1022,7 +1022,7 @@ h3 {
 
 .contact-card {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   align-items: start;
   gap: 0.7rem;
   padding: 0.9rem 1rem;
@@ -1055,6 +1055,60 @@ h3 {
 .contact-card a,
 .contact-card p {
   margin: 0;
+}
+
+.contact-socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-top: 0.05rem;
+}
+
+.contact-social {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.45rem;
+  height: 2.45rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: #f4faf7;
+  text-decoration: none;
+  transition: transform 180ms ease, border-color 180ms ease, background 180ms ease, color 180ms ease;
+}
+
+.contact-social svg {
+  width: 1.15rem;
+  height: 1.15rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.contact-social svg path,
+.contact-social svg rect,
+.contact-social svg circle {
+  vector-effect: non-scaling-stroke;
+}
+
+.contact-social-facebook svg {
+  fill: currentColor;
+  stroke: none;
+}
+
+.contact-social:hover,
+.contact-social:focus-visible {
+  transform: translateY(-1px);
+  border-color: rgba(0, 175, 102, 0.42);
+  background: rgba(0, 175, 102, 0.12);
+  color: #9df0c6;
+}
+
+.contact-social:focus-visible {
+  box-shadow: 0 0 0 0.18rem rgba(0, 175, 102, 0.14);
 }
 
 .site-admin-access {
