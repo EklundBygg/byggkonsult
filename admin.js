@@ -59,6 +59,10 @@ const employeeBio = document.getElementById("employee-bio");
 const employeeImageFile = document.getElementById("employee-image-file");
 const uploadEmployeeImageButton = document.getElementById("upload-employee-image-button");
 const employeeImagePreview = document.getElementById("employee-image-preview");
+const employeeCropper = document.getElementById("employee-cropper");
+const employeeCropCanvas = document.getElementById("employee-crop-canvas");
+const employeeCropZoom = document.getElementById("employee-crop-zoom");
+const employeeCropReset = document.getElementById("employee-crop-reset");
 
 let currentProjectId = null;
 let currentProjects = [];
@@ -66,6 +70,14 @@ let currentProjectImages = [];
 let currentEmployeeId = null;
 let currentEmployees = [];
 let draggedProjectId = null;
+let employeeCropObjectUrl = "";
+let employeeCropImage = null;
+let employeeCropZoomValue = 1;
+let employeeCropOffsetX = 0;
+let employeeCropOffsetY = 0;
+let employeeCropPointerId = null;
+let employeeCropPointerX = 0;
+let employeeCropPointerY = 0;
 let currentSiteSettings = {
   hero_image_url: "",
   hero_image_position: "50% 50%",
@@ -321,6 +333,115 @@ const renderEmployeeImagePreview = (url) => {
   employeeImagePreview.innerHTML = `<img src="${url}" alt="Medarbetarbild" />`;
 };
 
+const getEmployeeCropMetrics = () => {
+  if (!employeeCropImage) return null;
+
+  const canvasWidth = employeeCropCanvas.width;
+  const canvasHeight = employeeCropCanvas.height;
+  const coverScale = Math.max(
+    canvasWidth / employeeCropImage.naturalWidth,
+    canvasHeight / employeeCropImage.naturalHeight
+  );
+  const scale = coverScale * employeeCropZoomValue;
+  const drawWidth = employeeCropImage.naturalWidth * scale;
+  const drawHeight = employeeCropImage.naturalHeight * scale;
+  const maxOffsetX = Math.max(0, (drawWidth - canvasWidth) / 2);
+  const maxOffsetY = Math.max(0, (drawHeight - canvasHeight) / 2);
+
+  employeeCropOffsetX = Math.min(Math.max(employeeCropOffsetX, -maxOffsetX), maxOffsetX);
+  employeeCropOffsetY = Math.min(Math.max(employeeCropOffsetY, -maxOffsetY), maxOffsetY);
+
+  return {
+    drawWidth,
+    drawHeight,
+    drawX: (canvasWidth - drawWidth) / 2 + employeeCropOffsetX,
+    drawY: (canvasHeight - drawHeight) / 2 + employeeCropOffsetY,
+  };
+};
+
+const renderEmployeeCrop = () => {
+  const context = employeeCropCanvas?.getContext("2d");
+  const metrics = getEmployeeCropMetrics();
+  if (!context || !metrics || !employeeCropImage) return;
+
+  context.fillStyle = "#ffffff";
+  context.fillRect(0, 0, employeeCropCanvas.width, employeeCropCanvas.height);
+  context.imageSmoothingEnabled = true;
+  context.imageSmoothingQuality = "high";
+  context.drawImage(
+    employeeCropImage,
+    metrics.drawX,
+    metrics.drawY,
+    metrics.drawWidth,
+    metrics.drawHeight
+  );
+};
+
+const resetEmployeeCropPosition = () => {
+  employeeCropZoomValue = 1;
+  employeeCropOffsetX = 0;
+  employeeCropOffsetY = 0;
+  employeeCropZoom.value = "1";
+  renderEmployeeCrop();
+};
+
+const clearEmployeeCropper = () => {
+  if (employeeCropObjectUrl) {
+    URL.revokeObjectURL(employeeCropObjectUrl);
+  }
+
+  employeeCropObjectUrl = "";
+  employeeCropImage = null;
+  employeeCropPointerId = null;
+  employeeCropper.hidden = true;
+  uploadEmployeeImageButton.disabled = true;
+  employeeCropCanvas.classList.remove("is-dragging");
+};
+
+const loadEmployeeCropFile = (file) => {
+  clearEmployeeCropper();
+  if (!file) return;
+
+  employeeCropObjectUrl = URL.createObjectURL(file);
+  const image = new Image();
+
+  image.onload = () => {
+    employeeCropImage = image;
+    employeeCropper.hidden = false;
+    uploadEmployeeImageButton.disabled = false;
+    resetEmployeeCropPosition();
+    setStatus(employeeStatus, "");
+  };
+
+  image.onerror = () => {
+    clearEmployeeCropper();
+    setStatus(employeeStatus, "Kunde inte läsa bildfilen.", true);
+  };
+
+  image.src = employeeCropObjectUrl;
+};
+
+const createEmployeeCroppedBlob = () =>
+  new Promise((resolve, reject) => {
+    if (!employeeCropImage) {
+      reject(new Error("Välj och placera en bild först."));
+      return;
+    }
+
+    renderEmployeeCrop();
+    employeeCropCanvas.toBlob(
+      (blob) => {
+        if (!blob) {
+          reject(new Error("Kunde inte exportera bilden."));
+          return;
+        }
+        resolve(blob);
+      },
+      "image/jpeg",
+      0.88
+    );
+  });
+
 const getSiteSettingsPayload = () => ({
   hero_image_url: {
     key: "hero_image_url",
@@ -460,6 +581,7 @@ const resetEmployeeForm = () => {
   employeeBio.value = "";
   syncEmployeePhotoInputs("");
   employeeImageFile.value = "";
+  clearEmployeeCropper();
   renderEmployeeImagePreview("");
   setStatus(employeeStatus, "");
   persistEmployeeDraft();
@@ -534,6 +656,7 @@ const fillEmployeeForm = (employee) => {
   employeeBio.value = employee.bio || "";
   syncEmployeePhotoInputs(employee.photo_url || "");
   employeeImageFile.value = "";
+  clearEmployeeCropper();
   renderEmployeeImagePreview(employee.photo_url || "");
   setStatus(employeeStatus, "");
   persistEmployeeDraft();
@@ -1056,16 +1179,26 @@ const uploadEmployeeImage = async () => {
   }
 
   const existingPath = getStoragePathFromPublicUrl(employeePhotoUrl.value.trim(), "employees");
-  const extension = file.name.includes(".") ? file.name.split(".").pop().toLowerCase() : "jpg";
   const safeBaseName = employeeName.value.trim()
     ? slugify(employeeName.value.trim())
     : currentEmployeeId || `employee-${Date.now()}`;
-  const safeName = `employees/${safeBaseName}-${Date.now()}.${extension}`;
+  const safeName = `employees/${safeBaseName}-${Date.now()}.jpg`;
+
+  setStatus(employeeStatus, "Optimerar bild...");
+
+  let croppedImage;
+  try {
+    croppedImage = await createEmployeeCroppedBlob();
+  } catch (error) {
+    setStatus(employeeStatus, error instanceof Error ? error.message : "Kunde inte beskära bilden.", true);
+    return;
+  }
 
   setStatus(employeeStatus, "Laddar upp bild...");
 
-  const { error } = await supabaseClient.storage.from("employees").upload(safeName, file, {
+  const { error } = await supabaseClient.storage.from("employees").upload(safeName, croppedImage, {
     cacheControl: "3600",
+    contentType: "image/jpeg",
     upsert: false,
   });
 
@@ -1078,6 +1211,7 @@ const uploadEmployeeImage = async () => {
   syncEmployeePhotoInputs(data.publicUrl);
   renderEmployeeImagePreview(data.publicUrl);
   employeeImageFile.value = "";
+  clearEmployeeCropper();
 
   if (currentEmployeeId) {
     const { error: updateError } = await supabaseClient
@@ -1171,6 +1305,63 @@ uploadProjectGalleryImageButton.addEventListener("click", uploadProjectGalleryIm
 saveEmployeeButton.addEventListener("click", saveEmployee);
 deleteEmployeeButton.addEventListener("click", deleteEmployee);
 uploadEmployeeImageButton.addEventListener("click", uploadEmployeeImage);
+employeeImageFile.addEventListener("change", () => {
+  loadEmployeeCropFile(employeeImageFile.files?.[0]);
+});
+employeeCropZoom.addEventListener("input", () => {
+  employeeCropZoomValue = Number(employeeCropZoom.value || 1);
+  renderEmployeeCrop();
+});
+employeeCropReset.addEventListener("click", resetEmployeeCropPosition);
+employeeCropCanvas.addEventListener("pointerdown", (event) => {
+  if (!employeeCropImage) return;
+  employeeCropPointerId = event.pointerId;
+  employeeCropPointerX = event.clientX;
+  employeeCropPointerY = event.clientY;
+  employeeCropCanvas.classList.add("is-dragging");
+  employeeCropCanvas.setPointerCapture?.(event.pointerId);
+});
+employeeCropCanvas.addEventListener("pointermove", (event) => {
+  if (employeeCropPointerId !== event.pointerId) return;
+
+  const rect = employeeCropCanvas.getBoundingClientRect();
+  if (!rect.width || !rect.height) return;
+
+  employeeCropOffsetX += (event.clientX - employeeCropPointerX) * (employeeCropCanvas.width / rect.width);
+  employeeCropOffsetY += (event.clientY - employeeCropPointerY) * (employeeCropCanvas.height / rect.height);
+  employeeCropPointerX = event.clientX;
+  employeeCropPointerY = event.clientY;
+  renderEmployeeCrop();
+});
+
+const stopEmployeeCropDrag = (event) => {
+  if (employeeCropPointerId !== event.pointerId) return;
+  employeeCropPointerId = null;
+  employeeCropCanvas.classList.remove("is-dragging");
+  employeeCropCanvas.releasePointerCapture?.(event.pointerId);
+};
+
+employeeCropCanvas.addEventListener("pointerup", stopEmployeeCropDrag);
+employeeCropCanvas.addEventListener("pointercancel", stopEmployeeCropDrag);
+employeeCropCanvas.addEventListener("lostpointercapture", (event) => {
+  if (employeeCropPointerId === event.pointerId) {
+    employeeCropPointerId = null;
+    employeeCropCanvas.classList.remove("is-dragging");
+  }
+});
+employeeCropCanvas.addEventListener("keydown", (event) => {
+  if (!employeeCropImage) return;
+  const step = event.shiftKey ? 40 : 10;
+
+  if (event.key === "ArrowLeft") employeeCropOffsetX -= step;
+  else if (event.key === "ArrowRight") employeeCropOffsetX += step;
+  else if (event.key === "ArrowUp") employeeCropOffsetY -= step;
+  else if (event.key === "ArrowDown") employeeCropOffsetY += step;
+  else return;
+
+  event.preventDefault();
+  renderEmployeeCrop();
+});
 saveSiteSettingsButton.addEventListener("click", saveSiteSettings);
 uploadHeroImageButton.addEventListener("click", uploadHeroImage);
 

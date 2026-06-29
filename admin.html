@@ -289,12 +289,33 @@
 
                     <div class="field-row media-row">
                       <label class="media-upload">
-                        <span>Ladda upp bild</span>
+                        <span>Välj originalbild</span>
                         <input id="employee-image-file" type="file" accept="image/png,image/jpeg,image/webp,image/gif" />
                       </label>
                     </div>
 
-                    <button id="upload-employee-image-button" class="secondary-button" type="button">Ladda upp</button>
+                    <div class="employee-cropper" id="employee-cropper" hidden>
+                      <canvas
+                        class="employee-crop-canvas"
+                        id="employee-crop-canvas"
+                        width="800"
+                        height="900"
+                        tabindex="0"
+                        aria-label="Beskär medarbetarbild"
+                      ></canvas>
+
+                      <div class="employee-crop-controls">
+                        <label class="employee-crop-zoom">
+                          <span>Zoom</span>
+                          <input id="employee-crop-zoom" type="range" min="1" max="3" step="0.01" value="1" />
+                        </label>
+                        <button id="employee-crop-reset" class="secondary-button" type="button">Återställ</button>
+                      </div>
+                    </div>
+
+                    <button id="upload-employee-image-button" class="primary-button" type="button" disabled>
+                      Beskär och ladda upp
+                    </button>
 
                     <div class="image-preview" id="employee-image-preview"></div>
                   </div>
