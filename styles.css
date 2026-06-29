@@ -1022,9 +1022,9 @@ h3 {
 
 .contact-card {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   align-items: start;
-  gap: 0.7rem;
+  gap: 1rem;
   padding: 0.9rem 1rem;
   border-radius: var(--radius-lg);
 }
@@ -1068,8 +1068,8 @@ h3 {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2.45rem;
-  height: 2.45rem;
+  width: 2.95rem;
+  height: 2.95rem;
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: rgba(255, 255, 255, 0.04);
@@ -1079,22 +1079,8 @@ h3 {
 }
 
 .contact-social svg {
-  width: 1.15rem;
-  height: 1.15rem;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.8;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.contact-social svg path,
-.contact-social svg rect,
-.contact-social svg circle {
-  vector-effect: non-scaling-stroke;
-}
-
-.contact-social-facebook svg {
+  width: 1.45rem;
+  height: 1.45rem;
   fill: currentColor;
   stroke: none;
 }
