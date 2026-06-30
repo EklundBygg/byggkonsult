@@ -1544,14 +1544,13 @@ h3 {
 
   .topbar {
     padding: 0.9rem;
+    grid-template-columns: 1fr;
+    grid-template-areas: "brand";
   }
 
+  .nav-toggle,
   .nav {
-    gap: 0.45rem;
-  }
-
-  .nav a {
-    font-size: 0.95rem;
+    display: none !important;
   }
 
   .brand-logo-mark {
