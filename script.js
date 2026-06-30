@@ -84,6 +84,8 @@ const HERO_SETTINGS_CACHE_KEY = "eklund_site_settings_hero";
 
 const heroBackdrop = document.querySelector(".hero-backdrop");
 const stickyFooter = document.querySelector(".sticky-footer");
+const navToggle = document.querySelector(".nav-toggle");
+const siteNav = document.getElementById("site-nav");
 const projectTypeButtons = document.querySelectorAll("[data-project-type]");
 const projectsGrid = document.getElementById("projects-grid");
 const projectsToggleButton = document.getElementById("projects-toggle-button");
@@ -112,6 +114,29 @@ const updateStickyFooterVisibility = () => {
   if (!stickyFooter) return;
   stickyFooter.classList.toggle("is-visible", window.scrollY > 180);
 };
+
+const setNavOpen = (isOpen) => {
+  if (!navToggle || !siteNav) return;
+  navToggle.setAttribute("aria-expanded", String(isOpen));
+  siteNav.classList.toggle("is-open", isOpen);
+};
+
+if (navToggle && siteNav) {
+  navToggle.addEventListener("click", () => {
+    const isOpen = navToggle.getAttribute("aria-expanded") === "true";
+    setNavOpen(!isOpen);
+  });
+
+  siteNav.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => setNavOpen(false));
+  });
+
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 720) {
+      setNavOpen(false);
+    }
+  });
+}
 
 const projectTypeContent = {
   "kommersiella-byggnader": {

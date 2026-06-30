@@ -47,7 +47,16 @@
           <img class="brand-logo-text" src="Baratext50px.png" alt="" aria-hidden="true" />
         </a>
 
-        <nav class="nav" aria-label="Huvudnavigation">
+        <button class="nav-toggle" type="button" aria-controls="site-nav" aria-expanded="false">
+          <span class="nav-toggle-bars" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+          <span class="nav-toggle-label">Meny</span>
+        </button>
+
+        <nav class="nav" id="site-nav" aria-label="Huvudnavigation">
           <a href="#tjanster">Tjänster</a>
           <a href="#projekt">Projekt</a>
           <a href="#om-oss">Om företaget</a>
