@@ -1553,6 +1553,10 @@ h3 {
     display: none !important;
   }
 
+  .site-admin-access {
+    display: none;
+  }
+
   .brand-logo-mark {
     width: 1.95rem;
     height: 1.95rem;
