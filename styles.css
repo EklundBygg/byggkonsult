@@ -346,6 +346,131 @@ body::before {
   overflow: hidden;
 }
 
+.award-announcement {
+  position: absolute;
+  z-index: 4;
+  top: 2rem;
+  right: 2rem;
+  width: min(340px, calc(100% - 4rem));
+  border: 1px solid rgba(218, 176, 79, 0.42);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgba(29, 35, 30, 0.96), rgba(13, 23, 19, 0.94));
+  box-shadow: 0 22px 50px rgba(3, 9, 6, 0.42), inset 0 1px rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(14px);
+  opacity: 0;
+  transform: translateX(calc(100% + 3rem));
+  transition: opacity 420ms ease, transform 620ms cubic-bezier(0.22, 1, 0.36, 1), border-color 180ms ease;
+  pointer-events: none;
+}
+
+.award-announcement.is-shown {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+.award-announcement:hover,
+.award-announcement:focus-within {
+  border-color: rgba(235, 197, 104, 0.72);
+}
+
+.award-announcement-link {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.9rem;
+  padding: 1rem 2.5rem 1rem 1rem;
+  color: #fff;
+  text-decoration: none;
+}
+
+.award-announcement-medal {
+  display: grid;
+  place-items: center;
+  width: 3.15rem;
+  height: 3.15rem;
+  border-radius: 50%;
+  color: #d9ae4d;
+  background: rgba(217, 174, 77, 0.09);
+  border: 1px solid rgba(217, 174, 77, 0.25);
+}
+
+.award-announcement-medal svg {
+  display: block;
+  width: 2.25rem;
+  height: 2.25rem;
+  fill: currentColor;
+}
+
+.award-announcement-medal .award-announcement-star {
+  fill: #152019;
+}
+
+.award-announcement-copy {
+  display: grid;
+  gap: 0.22rem;
+}
+
+.award-announcement-kicker {
+  color: #d9ae4d;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.award-announcement-copy strong {
+  font-size: 1.04rem;
+  line-height: 1.15;
+}
+
+.award-announcement-more {
+  color: rgba(244, 248, 246, 0.72);
+  font-size: 0.78rem;
+  font-weight: 700;
+  transition: color 180ms ease;
+}
+
+.award-announcement-link:hover .award-announcement-more,
+.award-announcement-link:focus-visible .award-announcement-more {
+  color: #f0ce80;
+}
+
+.award-announcement-close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  color: rgba(255, 255, 255, 0.68);
+  background: rgba(255, 255, 255, 0.06);
+  font: inherit;
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 180ms ease, background 180ms ease, transform 180ms ease;
+}
+
+.award-announcement-close:hover,
+.award-announcement-close:focus-visible {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.14);
+  transform: scale(1.05);
+}
+
+.award-announcement.is-dismissed {
+  opacity: 0;
+  transform: translateX(calc(100% + 3rem));
+  pointer-events: none;
+}
+
 .eyebrow,
 .card-label,
 .contact-label {
@@ -1516,6 +1641,14 @@ h3 {
   .hero {
     min-height: auto;
     padding: 1.4rem;
+    padding-bottom: 9.5rem;
+  }
+
+  .award-announcement {
+    top: auto;
+    right: 1.4rem;
+    bottom: 1.4rem;
+    width: min(360px, calc(100% - 2.8rem));
   }
 
   .hero-blueprint {
@@ -1582,7 +1715,36 @@ h3 {
 
   .hero {
     padding: 1.1rem;
+    padding-bottom: 10rem;
     border-radius: 0 0 14px 14px;
+  }
+
+  .award-announcement {
+    right: 1.1rem;
+    bottom: 1.1rem;
+    width: calc(100% - 2.2rem);
+    transform: translateY(calc(100% + 2rem));
+  }
+
+  .award-announcement.is-shown {
+    transform: translateY(0);
+  }
+
+  .award-announcement.is-dismissed {
+    transform: translateY(calc(100% + 2rem));
+  }
+
+  .award-announcement-link {
+    padding: 0.85rem 2.4rem 0.85rem 0.85rem;
+  }
+
+  .award-announcement-medal {
+    width: 2.8rem;
+    height: 2.8rem;
+  }
+
+  .award-announcement-copy strong {
+    font-size: 0.98rem;
   }
 
   .section,

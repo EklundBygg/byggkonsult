@@ -89,6 +89,8 @@ const siteNav = document.getElementById("site-nav");
 const projectTypeButtons = document.querySelectorAll("[data-project-type]");
 const projectsGrid = document.getElementById("projects-grid");
 const projectsToggleButton = document.getElementById("projects-toggle-button");
+const awardAnnouncement = document.getElementById("award-announcement");
+const awardAnnouncementClose = document.getElementById("award-announcement-close");
 const employeesGrid = document.getElementById("employees-grid");
 const projectModal = document.getElementById("project-modal");
 const projectModalClose = document.getElementById("project-modal-close");
@@ -109,6 +111,40 @@ const projectTypeModalBody = document.getElementById("project-type-modal-body");
 const PROJECTS_PREVIEW_COUNT = 5;
 let allProjects = [];
 let projectsExpanded = false;
+
+const scheduleAwardAnnouncement = () => {
+  if (!awardAnnouncement || awardAnnouncement.dataset.showScheduled === "true") return;
+
+  awardAnnouncement.dataset.showScheduled = "true";
+  window.setTimeout(() => {
+    awardAnnouncement.classList.add("is-shown");
+  }, 500);
+};
+
+if (awardAnnouncement) {
+  if (document.documentElement.classList.contains("hero-image-ready")) {
+    scheduleAwardAnnouncement();
+  } else {
+    const heroReadyObserver = new MutationObserver(() => {
+      if (!document.documentElement.classList.contains("hero-image-ready")) return;
+
+      heroReadyObserver.disconnect();
+      scheduleAwardAnnouncement();
+    });
+
+    heroReadyObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+  }
+}
+
+if (awardAnnouncement && awardAnnouncementClose) {
+  awardAnnouncementClose.addEventListener("click", () => {
+    awardAnnouncement.classList.add("is-dismissed");
+    awardAnnouncement.classList.remove("is-shown");
+  });
+}
 
 const updateStickyFooterVisibility = () => {
   if (!stickyFooter) return;

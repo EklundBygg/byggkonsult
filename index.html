@@ -35,7 +35,7 @@
         } catch (_error) {}
       })();
     </script>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css?v=20261030-award" />
   </head>
   <body>
     <div class="site-shell">
@@ -100,6 +100,32 @@
               <li>Hjälp från planering till färdig lösning</li>
             </ul>
           </div>
+
+          <aside class="award-announcement" id="award-announcement" aria-label="Utmärkelse" aria-live="polite">
+            <button class="award-announcement-close" id="award-announcement-close" type="button" aria-label="Stäng utmärkelsen">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <a
+              class="award-announcement-link"
+              href="https://www.guldfesten.se/post/%C3%A5rets-tillv%C3%A4xtf%C3%B6retag-2026"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span class="award-announcement-medal" aria-hidden="true">
+                <svg viewBox="0 0 48 48" role="img">
+                  <path d="M15 4h8l5 14-8 4L15 4Z" />
+                  <path d="M33 4h-8l-5 14 8 4 5-18Z" />
+                  <circle cx="24" cy="29" r="12" />
+                  <path class="award-announcement-star" d="m24 21.5 2.2 4.5 5 .7-3.6 3.5.8 5-4.4-2.4-4.4 2.4.8-5-3.6-3.5 5-.7 2.2-4.5Z" />
+                </svg>
+              </span>
+              <span class="award-announcement-copy">
+                <span class="award-announcement-kicker">Vi har vunnit</span>
+                <strong>Årets Tillväxtföretag 2026</strong>
+                <span class="award-announcement-more">Läs mer hos Guldfesten <span aria-hidden="true">&rarr;</span></span>
+              </span>
+            </a>
+          </aside>
 
         </section>
 
@@ -505,6 +531,6 @@
     </dialog>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="script.js"></script>
+    <script src="script.js?v=20261030-award2"></script>
   </body>
 </html>
